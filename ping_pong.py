@@ -4,7 +4,7 @@ from time import time as timer
 window = display.set_mode((700, 500))
 display.set_caption("ping pong")
 window.fill((1 , 250 , 250))
-
+font.init()
 run=True
 
 class GameSprite(sprite.Sprite):
@@ -34,16 +34,39 @@ class Player(GameSprite):
 
 
 ball = GameSprite('ball.png' , 300 , 250 , 4 , (50, 50))
-racket1 = GameSprite('racket.png', 5 , 250, 4 , (50, 150))
-racket2 = GameSprite('racket.png', 635 , 250, 4 , (50, 150))
+racket1 = Player('racket.png', 5 , 250, 4 , (50, 150))
+racket2 = Player('racket.png', 635 , 250, 4 , (50, 150))
+speedx = 3 
+speedy = 3
+finish = False
+font1 =  font.Font(None , 70)
+lose1 = font1.render('player1 проиграл', True , (1 , 0 , 0 ))
+lose2 = font1.render('player2 проиграл', True , (1 , 0 , 0 ))
+
 
 while run:
     for e in event.get():
         if e.type == QUIT:
             run = False
-    ball.reset()
-    racket1.reset()
-    racket2.reset()
+    if finish != True:
+        window.fill((1 , 250 , 250))
+        ball.reset()
+        racket1.reset()
+        racket2.reset()
+        racket1.update_L()
+        racket2.update_R()
+        ball.rect.x += speedx
+        ball.rect.y += speedy
+    if ball.rect.y > 450 or ball.rect.y < 0:
+        speedy *= -1
+    if sprite.collide_rect(racket1, ball) or sprite.collide_rect(racket2, ball):
+        speedx *= -1
+    if ball.rect.x < 0:
+        finish = True
+        window.blit(lose1, (100, 100))
+    if ball.rect.x > 630:
+        finish = True
+        window.blit(lose2, (100, 100))
     
     display.update()
     time.delay(40)
