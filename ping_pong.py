@@ -1,4 +1,6 @@
 from pygame import *
+from random import randint
+from time import time as timer
 window = display.set_mode((700, 500))
 display.set_caption("ping pong")
 window.fill((1 , 250 , 250))
@@ -31,11 +33,17 @@ class Player(GameSprite):
             self.rect.y += self.speed
 
 
+ball = GameSprite('ball.png' , 300 , 250 , 4 , (50, 50))
+racket1 = GameSprite('racket.png', 5 , 250, 4 , (50, 150))
+racket2 = GameSprite('racket.png', 635 , 250, 4 , (50, 150))
+
 while run:
     for e in event.get():
         if e.type == QUIT:
             run = False
-    
+    ball.reset()
+    racket1.reset()
+    racket2.reset()
     
     display.update()
     time.delay(40)
